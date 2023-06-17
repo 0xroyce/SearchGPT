@@ -6,7 +6,7 @@ import openai
 from serpapi import GoogleSearch
 import streamlit as st
 
-# Load the secrets.toml file if it exists, otherwise use st.secrets
+# Load the secrets.toml file if it exists, otherwise use st.secrets to be able to deploy to eg Streamlit Sharing
 if os.path.exists("secrets.toml"):
     secrets = toml.load("secrets.toml")
 else:
