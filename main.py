@@ -1,35 +1,35 @@
-import os
-import sys
-import time
-from dotenv import load_dotenv
+from serpapi import GoogleSearch
 import requests
 import openai
-from serpapi import GoogleSearch
-from termcolor import colored
+import sys
 from tqdm import tqdm
+import time
+from dotenv import load_dotenv
+import os
 import colorama
+from termcolor import colored
 
 # Load the .env file
 load_dotenv()
 
 colorama.init(autoreset=True)
 
-OPEN_AI_API_KEY = os.getenv("OPENAI_API_KEY")
-BROWSERLESS_API_KEY = os.getenv("BROWSERLESS_API_KEY")
-SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
-OPENAI_MODEL = "gpt-3.5-turbo-16k-0613"
+open_ai_api_key = os.getenv("OPENAI_API_KEY")
+browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
+serpapi_api_key = os.getenv("SERPAPI_API_KEY")
+openai_model = "gpt-3.5-turbo-16k-0613"
 
-openai.api_key = OPEN_AI_API_KEY
-HEADERS = {'Cache-Control': 'no-cache', 'Content-Type': 'application/json'}
-PARAMS = {'token': BROWSERLESS_API_KEY}
+openai.api_key = open_ai_api_key
+headers = {'Cache-Control': 'no-cache', 'Content-Type': 'application/json'}
+params = {'token': browserless_api_key}
 
 
-def scrape_webpage(link):
+def scrape(link):
     json_data = {
         'url': link,
         'elements': [{'selector': 'body'}],
     }
-    response = requests.post('https://chrome.browserless.io/scrape', params=PARAMS, headers=HEADERS, json=json_data)
+    response = requests.post('https://chrome.browserless.io/scrape', params=params, headers=headers, json=json_data)
 
     if response.status_code == 200:
         webpage_text = response.json()['data'][0]['results'][0]['text']
@@ -39,7 +39,7 @@ def scrape_webpage(link):
         return ""
 
 
-def summarize_webpage(question, webpage_text):
+def summarize(question, webpage_text):
     prompt = """You are an intelligent summarization engine. Extract and summarize the
   most relevant information from a body of text related to a question.
 
@@ -51,7 +51,7 @@ def summarize_webpage(question, webpage_text):
   Relevant information:""".format(question, webpage_text[0:2500])
 
     response = openai.ChatCompletion.create(
-        model=OPENAI_MODEL,
+        model=openai_model,
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt},
@@ -61,7 +61,7 @@ def summarize_webpage(question, webpage_text):
     return response.choices[0].message.content
 
 
-def summarize_final_answer(question, summaries):
+def final_summary(question, summaries):
     num_summaries = len(summaries)
     prompt = "You are an intelligent summarization engine. Extract and summarize relevant information from the {} points below to construct an answer to a question.\n\nQuestion: {}\n\nRelevant Information:".format(
         num_summaries, question)
@@ -70,7 +70,7 @@ def summarize_final_answer(question, summaries):
         prompt += "\n{}. {}".format(i + 1, summary)
 
     response = openai.ChatCompletion.create(
-        model=OPENAI_MODEL,
+        model=openai_model,
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt},
@@ -80,23 +80,23 @@ def summarize_final_answer(question, summaries):
     return response.choices[0].message.content
 
 
-def get_link(result):
-    return result['link']
+def link(r):
+    return r['link']
 
 
-def get_search_results(question):
+def search_results(question):
     search = GoogleSearch({
         "q": question,
-        "api_key": SERPAPI_API_KEY,
+        "api_key": serpapi_api_key,
         "logging": False
     })
 
     result = search.get_dict()
-    return list(map(get_link, result['organic_results']))
+    return list(map(link, result['organic_results']))
 
 
 def print_citations(links, summaries):
-    print(colorama.Fore.MAGENTA + colorama.Style.BRIGHT + "CITATIONS" + colorama.Style.RESET_ALL)
+    print(colorama.Fore.YELLOW + colorama.Style.BRIGHT + "CITATIONS" + colorama.Style.RESET_ALL)
     num_citations = min(len(links), len(summaries))
     for i in range(num_citations):
         print("\n", "[{}]".format(i + 1), links[i], "\n", summaries[i], "\n")
@@ -107,7 +107,7 @@ def main():
     question = input()
     print("\n")
     sys.stdout = open(os.devnull, 'w')  # disable print
-    links = get_search_results(question)
+    links = search_results(question)
     sys.stdout = sys.__stdout__  # enable print
     webpages = []
     summaries = []
@@ -118,15 +118,15 @@ def main():
             pbar.update(12.5)
             time.sleep(0.1)
             if i < len(links):
-                webpages.append(scrape_webpage(links[i]))
+                webpages.append(scrape(links[i]))
             pbar.update(12.5)
             time.sleep(0.1)
             if i < len(webpages):
-                summaries.append(summarize_webpage(question, webpages[i]))
+                summaries.append(summarize(question, webpages[i]))
 
-    final_summary = summarize_final_answer(question, summaries)
-    print(colorama.Fore.MAGENTA + colorama.Style.BRIGHT + "\n\nHERE IS THE ANSWER\n" + colorama.Style.RESET_ALL)
-    print(final_summary, "\n")
+    answer = final_summary(question, summaries)
+    print(colorama.Fore.YELLOW + colorama.Style.BRIGHT + "\n\nHERE IS THE ANSWER\n" + colorama.Style.RESET_ALL)
+    print(answer, "\n")
     print_citations(links, summaries)
 
 
