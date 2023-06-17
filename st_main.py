@@ -1,24 +1,23 @@
 import os
 import time
-from dotenv import load_dotenv
+import toml
 import requests
 import openai
 from serpapi import GoogleSearch
 import streamlit as st
 
-# Load the .env file
-load_dotenv()
+# Load the secrets.toml file
+secrets = toml.load("secrets.toml")
 
 # Set API keys and model
-open_ai_api_key = os.getenv("OPENAI_API_KEY")
-browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
-serpapi_api_key = os.getenv("SERPAPI_API_KEY")
+open_ai_api_key = secrets["secrets"]["OPENAI_API_KEY"]
+browserless_api_key = secrets["secrets"]["BROWSERLESS_API_KEY"]
+serpapi_api_key = secrets["secrets"]["SERPAPI_API_KEY"]
 openai_model = "gpt-3.5-turbo-16k-0613"
 
 openai.api_key = open_ai_api_key
 headers = {'Cache-Control': 'no-cache', 'Content-Type': 'application/json'}
 params = {'token': browserless_api_key}
-
 
 def scrape(link):
     """Scrape the content of a webpage."""
