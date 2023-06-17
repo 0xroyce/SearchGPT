@@ -4,7 +4,7 @@
 
 <h2>Installation</h2>
 
-<p>Add API codes in .env file. Install the dependencies and devDependencies and start the server.</p>
+<p>Add API codes in .env file. Install the requirements and run the main.py.</p>
 
 ```sh  
 $ pip install -r requirements.txt
@@ -13,8 +13,8 @@ $ python main.py
 
 <h2>Author</h2>
 
-<a hrefs="https://twitter.com/petrroyce">Twitter</a>
+[Petr Royce @ Twitter](https://twitter.com/petrroyce)
 
 <h2>Licence</h2>
 
-MIT © <a hrefs="https://github.com/seedgularity">Seedgularity</a>
+MIT © [Seedgularity](https://github.com/seedgularity)
