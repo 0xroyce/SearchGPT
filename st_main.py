@@ -104,7 +104,7 @@ def print_citations(links, summaries):
 
 
 def main():
-    st.title("Intelligent Summarization Engine")
+    st.title("SearchGPT")
     question = st.text_input("What would you like me to search?")
     if st.button("Search"):
         links = search_results(question)
