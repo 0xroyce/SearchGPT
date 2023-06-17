@@ -35,7 +35,7 @@ def scrape(link):
         webpage_text = response.json()['data'][0]['results'][0]['text']
         return webpage_text
     else:
-        st.write(f"Error: Unable to fetch content from {link}. Status code: {response.status_code}")
+        #st.write(f"Error: Unable to fetch content from {link}. Status code: {response.status_code}")
         return ""
 
 
