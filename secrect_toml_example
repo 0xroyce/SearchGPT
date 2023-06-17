@@ -1,4 +1,4 @@
-[secrets]
+[api_keys]
 OPENAI_API_KEY = ""
 SERPAPI_API_KEY = ""
 BROWSERLESS_API_KEY = ""
