@@ -11,6 +11,10 @@ $ pip install -r requirements.txt
 $ python main.py
 ```
 
+<h2>Author</h2>
+
+<a hrefs="https://twitter.com/petrroyce">Twitter</a>
+
 <h2>Licence</h2>
 
 MIT © <a hrefs="https://github.com/seedgularity">Seedgularity</a>
