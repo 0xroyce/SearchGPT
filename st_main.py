@@ -12,9 +12,9 @@ if os.path.exists("secrets.toml"):
 else:
     # Set API keys and model
     st.write(
-        os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
-        os.environ["BROWSERLESS_API_KEY"] == st.secrets["BROWSERLESS_API_KEY"],
-        os.environ["SERPAPI_API_KEY"] == st.secrets["SERPAPI_API_KEY"]
+        os.environ["OPENAI_API_KEY"] == st.secrets.secrets["OPENAI_API_KEY"],
+        os.environ["BROWSERLESS_API_KEY"] == st.secrets.secrets["BROWSERLESS_API_KEY"],
+        os.environ["SERPAPI_API_KEY"] == st.secrets.secrets["SERPAPI_API_KEY"]
     )
 
 open_ai_api_key = secrets["OPENAI_API_KEY"]
