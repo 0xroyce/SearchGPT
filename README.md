@@ -13,6 +13,14 @@ $ pip install -r requirements.txt
 $ python main.py
 ```
 
+<h3>Update</h3>
+
+Streamlit version has been added as st_main.py. To run streamlit version, run the following command:
+
+```sh
+$ streamlit run st_main.py
+```
+
 <h2>Author</h2>
 
 [Petr Royce @ Twitter](https://twitter.com/petrroyce)
