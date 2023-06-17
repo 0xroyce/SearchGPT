@@ -43,15 +43,15 @@ def scrape(link):
 
 def summarize(question, webpage_text):
     """Summarize the relevant information from a body of text related to a question."""
-    prompt = """You are an intelligent summarization engine. Extract and summarize the
+    prompt = f"""You are an intelligent summarization engine. Extract and summarize the
   most relevant information from a body of text related to a question.
 
-  Question: {}
+  Question: {question}
 
   Body of text to extract and summarize information from:
-  {}
+  {webpage_text[0:2500]}
 
-  Relevant information:""".format(question, webpage_text[0:2500])
+  Relevant information:"""
 
     response = openai.ChatCompletion.create(
         model=openai_model,
@@ -67,11 +67,10 @@ def summarize(question, webpage_text):
 def final_summary(question, summaries):
     """Construct a final summary from a list of summaries."""
     num_summaries = len(summaries)
-    prompt = "You are an intelligent summarization engine. Extract and summarize relevant information from the {} points below to construct an answer to a question.\n\nQuestion: {}\n\nRelevant Information:".format(
-        num_summaries, question)
+    prompt = f"You are an intelligent summarization engine. Extract and summarize relevant information from the {num_summaries} points below to construct an answer to a question.\n\nQuestion: {question}\n\nRelevant Information:"
 
     for i, summary in enumerate(summaries):
-        prompt += "\n{}. {}".format(i + 1, summary)
+        prompt += f"\n{i + 1}. {summary}"
 
     response = openai.ChatCompletion.create(
         model=openai_model,
@@ -106,7 +105,7 @@ def print_citations(links, summaries):
     print(colorama.Fore.YELLOW + colorama.Style.BRIGHT + "CITATIONS" + colorama.Style.RESET_ALL)
     num_citations = min(len(links), len(summaries))
     for i in range(num_citations):
-        print("\n", "[{}]".format(i + 1), links[i], "\n", summaries[i], "\n")
+        print("\n", f"[{i + 1}] {links[i]}\n{summaries[i]}\n")
 
 def main():
     print(colored("\nWHAT WOULD YOU LIKE ME TO SEARCH?\n", "cyan", attrs=["bold"]))
