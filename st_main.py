@@ -7,10 +7,10 @@ from serpapi import GoogleSearch
 import streamlit as st
 
 # Load the secrets.toml file if it exists, otherwise use st.secrets
-try:
+if os.path.exists("secrets.toml"):
     secrets = toml.load("secrets.toml")
-except FileNotFoundError:
-    secrets = st.secrets
+else:
+    secrets = {"secrets": st.secrets}
 
 # Set API keys and model
 open_ai_api_key = secrets["secrets"]["OPENAI_API_KEY"]
