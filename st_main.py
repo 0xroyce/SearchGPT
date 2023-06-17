@@ -123,10 +123,11 @@ def main():
                 if i < len(webpages):
                     summaries.append(summarize(question, webpages[i]))
 
-        answer = final_summary(question, summaries)
-        st.write("HERE IS THE ANSWER")
-        st.write(answer)
-        print_citations(links, summaries)
+            answer = final_summary(question, summaries)
+
+            st.write("HERE IS THE ANSWER")
+            st.write(answer)
+            print_citations(links, summaries)
 
 
 if __name__ == "__main__":
