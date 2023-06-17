@@ -6,7 +6,9 @@
 
 <h2>Installation</h2>
 
-<p>Add API codes in .env file. Install the requirements and run the main.py.</p>
+<p>For console version, add API codes in .env file. For Streamlit version, add API codes to secrets.toml.</p>
+
+<p>Install the requirements and run the main.py.</p>
 
 ```sh  
 $ pip install -r requirements.txt
