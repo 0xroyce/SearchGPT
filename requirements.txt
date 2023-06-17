@@ -6,3 +6,4 @@ termcolor~=2.3.0
 tqdm~=4.65.0
 streamlit~=1.23.1
 google-serp-api
+google-search-results
