@@ -1,19 +1,20 @@
-from serpapi import GoogleSearch
-import requests
-import openai
+import os
 import sys
-from tqdm import tqdm
 import time
 from dotenv import load_dotenv
-import os
-import colorama
+import requests
+import openai
+from serpapi import GoogleSearch
 from termcolor import colored
+from tqdm import tqdm
+import colorama
 
 # Load the .env file
 load_dotenv()
 
 colorama.init(autoreset=True)
 
+# Set API keys and model
 open_ai_api_key = os.getenv("OPENAI_API_KEY")
 browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
 serpapi_api_key = os.getenv("SERPAPI_API_KEY")
@@ -25,6 +26,7 @@ params = {'token': browserless_api_key}
 
 
 def scrape(link):
+    """Scrape the content of a webpage."""
     json_data = {
         'url': link,
         'elements': [{'selector': 'body'}],
@@ -40,6 +42,7 @@ def scrape(link):
 
 
 def summarize(question, webpage_text):
+    """Summarize the relevant information from a body of text related to a question."""
     prompt = """You are an intelligent summarization engine. Extract and summarize the
   most relevant information from a body of text related to a question.
 
@@ -62,6 +65,7 @@ def summarize(question, webpage_text):
 
 
 def final_summary(question, summaries):
+    """Construct a final summary from a list of summaries."""
     num_summaries = len(summaries)
     prompt = "You are an intelligent summarization engine. Extract and summarize relevant information from the {} points below to construct an answer to a question.\n\nQuestion: {}\n\nRelevant Information:".format(
         num_summaries, question)
@@ -81,10 +85,12 @@ def final_summary(question, summaries):
 
 
 def link(r):
+    """Extract the link from a search result."""
     return r['link']
 
 
 def search_results(question):
+    """Get search results for a question."""
     search = GoogleSearch({
         "q": question,
         "api_key": serpapi_api_key,
@@ -96,11 +102,11 @@ def search_results(question):
 
 
 def print_citations(links, summaries):
+    """Print citations for the summaries."""
     print(colorama.Fore.YELLOW + colorama.Style.BRIGHT + "CITATIONS" + colorama.Style.RESET_ALL)
     num_citations = min(len(links), len(summaries))
     for i in range(num_citations):
         print("\n", "[{}]".format(i + 1), links[i], "\n", summaries[i], "\n")
-
 
 def main():
     print(colored("\nWHAT WOULD YOU LIKE ME TO SEARCH?\n", "cyan", attrs=["bold"]))
