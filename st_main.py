@@ -6,20 +6,22 @@ import openai
 from serpapi import GoogleSearch
 import streamlit as st
 
-# Load the secrets.toml file if it exists, otherwise use st.secrets
-if os.path.exists("secrets.toml"):
-    secrets = toml.load("secrets.toml")["secrets"]
-else:
+if not os.path.exists("secrets.toml"):
     # Set API keys and model
     st.write(
-        os.environ["OPENAI_API_KEY"] == st.secrets.secrets["OPENAI_API_KEY"],
-        os.environ["BROWSERLESS_API_KEY"] == st.secrets.secrets["BROWSERLESS_API_KEY"],
-        os.environ["SERPAPI_API_KEY"] == st.secrets.secrets["SERPAPI_API_KEY"]
+        os.environ["OPENAI_API_KEY"] == st.secrets.api_keys["OPENAI_API_KEY"],
+        os.environ["BROWSERLESS_API_KEY"] == st.secrets.api_keys["BROWSERLESS_API_KEY"],
+        os.environ["SERPAPI_API_KEY"] == st.secrets.api_keys["SERPAPI_API_KEY"],
     )
+    open_ai_api_key = os.environ["OPENAI_API_KEY"]
+    browserless_api_key = os.environ["BROWSERLESS_API_KEY"]
+    serpapi_api_key = os.environ["SERPAPI_API_KEY"]
+else:
+    secrets = toml.load("secrets.toml")["api_keys"]
+    open_ai_api_key = secrets["OPENAI_API_KEY"]
+    browserless_api_key = secrets["BROWSERLESS_API_KEY"]
+    serpapi_api_key = secrets["SERPAPI_API_KEY"]
 
-open_ai_api_key = secrets["OPENAI_API_KEY"]
-browserless_api_key = secrets["BROWSERLESS_API_KEY"]
-serpapi_api_key = secrets["SERPAPI_API_KEY"]
 openai_model = "gpt-3.5-turbo-16k-0613"
 
 openai.api_key = open_ai_api_key
