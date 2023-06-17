@@ -114,23 +114,27 @@ def main():
         webpages = []
         summaries = []
 
+        step_placeholder = st.empty()
+
         with st.spinner("Loading..."):
             for i in range(4):
                 time.sleep(0.1)
                 if i < len(links):
-                    st.write(f"Step {2*i+1}: Scraping link {i+1}")
+                    step_placeholder.text(f"Step {2*i+1}: Scraping link {i+1}")
                     webpages.append(scrape(links[i]))
                 time.sleep(0.1)
                 if i < len(webpages):
-                    st.write(f"Step {2*i+2}: Summarizing webpage {i+1}")
+                    step_placeholder.text(f"Step {2*i+2}: Summarizing webpage {i+1}")
                     summaries.append(summarize(question, webpages[i]))
 
-            st.write("Step 9: Generating final summary")
+            step_placeholder.text("Step 9: Generating final summary")
             answer = final_summary(question, summaries)
 
-            st.write("HERE IS THE ANSWER")
-            st.write(answer)
-            print_citations(links, summaries)
+        step_placeholder.empty()
+
+        st.write("HERE IS THE ANSWER")
+        st.write(answer)
+        print_citations(links, summaries)
 
 
 if __name__ == "__main__":
