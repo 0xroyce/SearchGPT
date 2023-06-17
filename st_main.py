@@ -6,16 +6,16 @@ import openai
 from serpapi import GoogleSearch
 import streamlit as st
 
-# Load the secrets.toml file if it exists, otherwise use st.secrets to be able to deploy to eg Streamlit Sharing
+# Load the secrets.toml file if it exists, otherwise use st.secrets
 if os.path.exists("secrets.toml"):
-    secrets = toml.load("secrets.toml")
+    secrets = toml.load("secrets.toml")["secrets"]
 else:
-    secrets = {"secrets": st.secrets}
+    secrets = st.secrets
 
 # Set API keys and model
-open_ai_api_key = secrets["secrets"]["OPENAI_API_KEY"]
-browserless_api_key = secrets["secrets"]["BROWSERLESS_API_KEY"]
-serpapi_api_key = secrets["secrets"]["SERPAPI_API_KEY"]
+open_ai_api_key = secrets["OPENAI_API_KEY"]
+browserless_api_key = secrets["BROWSERLESS_API_KEY"]
+serpapi_api_key = secrets["SERPAPI_API_KEY"]
 openai_model = "gpt-3.5-turbo-16k-0613"
 
 openai.api_key = open_ai_api_key
