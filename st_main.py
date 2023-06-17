@@ -10,14 +10,12 @@ import streamlit as st
 if os.path.exists("secrets.toml"):
     secrets = toml.load("secrets.toml")["secrets"]
 else:
-    secrets = st.secrets
-
-# Set API keys and model
-st.write(
-    os.environ["OPENAI_API_KEY"] == secrets["OPENAI_API_KEY"],
-    os.environ["BROWSERLESS_API_KEY"] == secrets["BROWSERLESS_API_KEY"],
-    os.environ["SERPAPI_API_KEY"] == secrets["SERPAPI_API_KEY"]
-)
+    # Set API keys and model
+    st.write(
+        os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"],
+        os.environ["BROWSERLESS_API_KEY"] == st.secrets["BROWSERLESS_API_KEY"],
+        os.environ["SERPAPI_API_KEY"] == st.secrets["SERPAPI_API_KEY"]
+    )
 
 open_ai_api_key = secrets["OPENAI_API_KEY"]
 browserless_api_key = secrets["BROWSERLESS_API_KEY"]
