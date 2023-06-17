@@ -13,9 +13,13 @@ else:
     secrets = st.secrets
 
 # Set API keys and model
-open_ai_api_key = os.environ.get("OPENAI_API_KEY", secrets["OPENAI_API_KEY"])
-browserless_api_key = os.environ.get("BROWSERLESS_API_KEY", secrets["BROWSERLESS_API_KEY"])
-serpapi_api_key = os.environ.get("SERPAPI_API_KEY", secrets["SERPAPI_API_KEY"])
+os.environ["OPENAI_API_KEY"] = secrets["OPENAI_API_KEY"]
+os.environ["BROWSERLESS_API_KEY"] = secrets["BROWSERLESS_API_KEY"]
+os.environ["SERPAPI_API_KEY"] = secrets["SERPAPI_API_KEY"]
+
+open_ai_api_key = secrets["OPENAI_API_KEY"]
+browserless_api_key = secrets["BROWSERLESS_API_KEY"]
+serpapi_api_key = secrets["SERPAPI_API_KEY"]
 openai_model = "gpt-3.5-turbo-16k-0613"
 
 openai.api_key = open_ai_api_key
