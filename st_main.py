@@ -5,6 +5,7 @@ import requests
 import openai
 from serpapi import GoogleSearch
 import streamlit as st
+import concurrent.futures
 
 if not os.path.exists("secrets.toml"):
     # Set API keys and model
@@ -106,26 +107,27 @@ def print_citations(links, summaries):
         st.write(f"[{i + 1}] {links[i]}\n{summaries[i]}\n")
 
 
+def scrape_and_summarize(link, question):
+    """Scrape the content of a webpage and summarize it."""
+    webpage_text = scrape(link)
+    summary = summarize(question, webpage_text)
+    return summary
+
 def main():
     st.title("SearchGPT")
     question = st.text_input("What would you like me to search?")
     if st.button("Search"):
         links = search_results(question)
-        webpages = []
         summaries = []
 
         step_placeholder = st.empty()
 
         with st.spinner("Loading..."):
-            for i in range(4):
-                time.sleep(0.1)
-                if i < len(links):
-                    step_placeholder.text(f"Step {2*i+1}: Scraping link {i+1}")
-                    webpages.append(scrape(links[i]))
-                time.sleep(0.1)
-                if i < len(webpages):
-                    step_placeholder.text(f"Step {2*i+2}: Summarizing webpage {i+1}")
-                    summaries.append(summarize(question, webpages[i]))
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                future_to_summary = {executor.submit(scrape_and_summarize, link, question): link for link in links}
+                for i, future in enumerate(concurrent.futures.as_completed(future_to_summary)):
+                    summaries.append(future.result())
+                    step_placeholder.text(f"Step {i+1}: Scraping and summarizing link {i+1}")
 
             step_placeholder.text("Step 9: Generating final summary")
             answer = final_summary(question, summaries)
