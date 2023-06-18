@@ -6,6 +6,16 @@
 
 ![image](https://github.com/seedgularity/SearchGPT/assets/131738679/2f36bb28-9863-41ca-bbad-4835e78135d6)
 
+<h2>Updates</h2>
+
+**Update 2023-06-18**
+
+Streamlit version has been updated and now running faster. Number of searches has been increased to provide better accuracy.
+
+**Update 2023-06-17**
+
+Streamlit version has been added.
+
 <h2>Installation</h2>
 
 <p>For console version, add API codes in .env file. For Streamlit version, add API codes to secrets.toml.</p>
@@ -16,8 +26,6 @@
 $ pip install -r requirements.txt
 $ python main.py
 ```
-
-<h3>Update</h3>
 
 Streamlit version has been added as st_main.py. To run streamlit version, run the following command:
 
