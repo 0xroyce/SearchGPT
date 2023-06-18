@@ -1,5 +1,4 @@
 import os
-import time
 import toml
 import requests
 import openai
@@ -24,6 +23,7 @@ openai.api_key = open_ai_api_key
 headers = {'Cache-Control': 'no-cache', 'Content-Type': 'application/json'}
 params = {'token': browserless_api_key}
 
+@st.cache_data
 def scrape(link):
     """Scrape the content of a webpage."""
     json_data = {
@@ -36,9 +36,7 @@ def scrape(link):
         webpage_text = response.json()['data'][0]['results'][0]['text']
         return webpage_text
     else:
-        ##st.write(f"Error: Unable to fetch content from {link}. Status code: {response.status_code}")
         return ""
-
 
 def summarize(question, webpage_text):
     """Summarize the relevant information from a body of text related to a question."""
@@ -62,7 +60,6 @@ def summarize(question, webpage_text):
 
     return response.choices[0].message.content
 
-
 def final_summary(question, summaries):
     """Construct a final summary from a list of summaries."""
     num_summaries = len(summaries)
@@ -81,12 +78,11 @@ def final_summary(question, summaries):
 
     return response.choices[0].message.content
 
-
 def link(r):
     """Extract the link from a search result."""
     return r['link']
 
-
+@st.cache_data
 def search_results(question):
     """Get search results for a question."""
     search = GoogleSearch({
@@ -98,14 +94,12 @@ def search_results(question):
     result = search.get_dict()
     return list(map(link, result['organic_results']))
 
-
 def print_citations(links, summaries):
     """Print citations for the summaries."""
     st.write("CITATIONS")
     num_citations = min(len(links), len(summaries))
     for i in range(num_citations):
         st.write(f"[{i + 1}] {links[i]}\n{summaries[i]}\n")
-
 
 def scrape_and_summarize(link, question):
     """Scrape the content of a webpage and summarize it."""
@@ -117,7 +111,7 @@ def main():
     st.title("SearchGPT")
     question = st.text_input("What would you like me to search?")
     if st.button("Search"):
-        links = search_results(question)
+        links = search_results(question)[:5]  # Limit the number of search results
         summaries = []
 
         step_placeholder = st.empty()
@@ -137,7 +131,6 @@ def main():
         st.write("HERE IS THE ANSWER")
         st.write(answer)
         print_citations(links, summaries)
-
 
 if __name__ == "__main__":
     main()
