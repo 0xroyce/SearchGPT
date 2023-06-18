@@ -111,7 +111,7 @@ def main():
     st.title("SearchGPT")
     question = st.text_input("What would you like me to search?")
     if st.button("Search"):
-        links = search_results(question)[:5]  # Limit the number of search results
+        links = search_results(question)[:7]  # Limit the number of search results
         summaries = []
 
         step_placeholder = st.empty()
