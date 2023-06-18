@@ -5,6 +5,7 @@ import openai
 from serpapi import GoogleSearch
 import streamlit as st
 import concurrent.futures
+import time
 
 if not os.path.exists("secrets.toml"):
     # Set API keys and model
@@ -50,15 +51,19 @@ def summarize(question, webpage_text):
 
   Relevant information:"""
 
-    response = openai.ChatCompletion.create(
-        model=openai_model,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt},
-        ]
-    )
-
-    return response.choices[0].message.content
+    while True:
+        try:
+            response = openai.ChatCompletion.create(
+                model=openai_model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt},
+                ]
+            )
+            return response.choices[0].message.content
+        except openai.error.RateLimitError:
+            print("Rate limit exceeded. Sleeping for 3 seconds.")
+            time.sleep(3)
 
 def final_summary(question, summaries):
     """Construct a final summary from a list of summaries."""
@@ -68,15 +73,19 @@ def final_summary(question, summaries):
     for i, summary in enumerate(summaries):
         prompt += f"\n{i + 1}. {summary}"
 
-    response = openai.ChatCompletion.create(
-        model=openai_model,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt},
-        ]
-    )
-
-    return response.choices[0].message.content
+    while True:
+        try:
+            response = openai.ChatCompletion.create(
+                model=openai_model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt},
+                ]
+            )
+            return response.choices[0].message.content
+        except openai.error.RateLimitError:
+            print("Rate limit exceeded. Sleeping for 3 seconds.")
+            time.sleep(3)
 
 def link(r):
     """Extract the link from a search result."""
