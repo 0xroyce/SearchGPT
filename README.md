@@ -10,11 +10,13 @@
 
 **Update 2023-06-18**
 
-Streamlit version has been updated and now running faster. Number of searches has been increased to provide better accuracy.
+- Streamlit version has been updated and now running faster. 
+- Number of searches has been increased to provide better accuracy in Streamlit version.
+- Timer for OpenAI added to Streamlit version.
 
 **Update 2023-06-17**
 
-Streamlit version has been added.
+- Streamlit version has been added.
 
 <h2>Installation</h2>
 
