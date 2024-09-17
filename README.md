@@ -8,6 +8,11 @@
 
 <h2>Updates</h2>
 
+**Update 2024-09-17**
+
+- Streamlit version not working as OAI API key missing
+- Download it locally and add OAI API key
+
 **Update 2023-06-18**
 
 - Streamlit version has been updated and now running faster. 
@@ -34,10 +39,6 @@ Streamlit version has been added as st_main.py. To run streamlit version, run th
 ```sh
 $ streamlit run st_main.py
 ```
-
-<h2>Author</h2>
-
-[Petr Royce @ Twitter](https://twitter.com/petrroyce)
 
 <h2>Licence</h2>
 
